@@ -59,9 +59,10 @@ void Asteroids::Start()
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
 	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
+	//mGameWorld->AddObject(CreateSpaceship());
+	
 	// Create some asteroids and add them to the world
-	CreateAsteroids(10);
+	//CreateAsteroids(10);
 
 	//Create the GUI
 	CreateGUI();
@@ -71,6 +72,9 @@ void Asteroids::Start()
 
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
+
+	// Show the start screen message
+	mStartScreenLabel->SetVisible(true);
 
 	// Start the game
 	GameSession::Start();
@@ -87,6 +91,19 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
+	if (key == ' ')
+	{
+		// Hide the start screen message
+		mStartScreenLabel->SetVisible(false);
+
+		// Create a spaceship and add it to the world
+		mGameWorld->AddObject(CreateSpaceship());
+
+		// Create some asteroids and add them to the world
+		CreateAsteroids(10);
+
+		return;
+}
 	switch (key)
 	{
 	case ' ':
