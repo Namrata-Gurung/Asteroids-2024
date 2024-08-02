@@ -58,12 +58,6 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
-	// Create a spaceship and add it to the world
-	//mGameWorld->AddObject(CreateSpaceship());
-	
-	// Create some asteroids and add them to the world
-	//CreateAsteroids(10);
-
 	//Create the GUI
 	CreateGUI();
 
@@ -71,10 +65,7 @@ void Asteroids::Start()
 	mGameWorld->AddListener(&mPlayer);
 
 	// Add this class as a listener of the player
-	mPlayer.AddListener(thisPtr);
-
-	// Show the start screen message
-	mStartScreenLabel->SetVisible(true);
+	mPlayer.AddListener(thisPtr); 
 
 	// Start the game
 	GameSession::Start();
@@ -91,10 +82,12 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-	if (key == ' ')
+	// Use the / key to start the game 
+	if (key == '/')
 	{
-		// Hide the start screen message
+		// Hide the start screen messages
 		mStartScreenLabel->SetVisible(false);
+		mStartMsgLabel->SetVisible(false);
 
 		// Create a spaceship and add it to the world
 		mGameWorld->AddObject(CreateSpaceship());
@@ -262,17 +255,30 @@ void Asteroids::CreateGUI()
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 
 	// Create a new GUILabel and wrap it up in a shared_ptr
-	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START"));
+	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START GAME"));
 	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
 	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
-	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
 	//Set the visibility of the label to true so that when the game session begins, the START message is visible
 	mStartScreenLabel->SetVisible(true);
 	//Add the GUILabel to the GUIContainer
 	shared_ptr<GUIComponent> start_screen_component
 		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.5f));
+	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.7f));
+
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mStartMsgLabel = shared_ptr<GUILabel>(new GUILabel("Please press '/' to begin"));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+	mStartMsgLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mStartMsgLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
+	//Set the visibility of the label to true so that when the game session begins, the START message is visible
+	mStartMsgLabel->SetVisible(true);
+	//Add the GUILabel to the GUIContainer
+	shared_ptr<GUIComponent> start_msg_component
+		= static_pointer_cast<GUIComponent>(mStartMsgLabel);
+	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4f));
 }
 
 void Asteroids::OnScoreChanged(int score)
