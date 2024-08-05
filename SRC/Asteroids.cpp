@@ -327,6 +327,4 @@ shared_ptr<GameObject> Asteroids::CreateExplosion()
 	return explosion;
 }
 
-
-
-
+// score table methods 
