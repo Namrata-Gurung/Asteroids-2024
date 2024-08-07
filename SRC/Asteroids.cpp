@@ -17,7 +17,7 @@
 
 /** Constructor. Takes arguments from command line, just in case. */
 Asteroids::Asteroids(int argc, char* argv[])
-	: GameSession(argc, argv), mHighScore("scores.txt")
+	: GameSession(argc, argv), mHighScore("scores.txt"), mDemoMode(false)
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
@@ -72,6 +72,63 @@ void Asteroids::Start()
 	GameSession::Start();
 }
 
+//Initialise start method for demo
+void Asteroids::StartDemoMode() {
+	// indicate game is in demo mode 
+	mDemoMode = true;
+	
+	mStartMsgLabel->SetVisible(false);
+	mStartScreenLabel->SetVisible(false);
+
+	// Create a spaceship and add it to the world
+	mGameWorld->AddObject(CreateSpaceship());
+
+	// Create some asteroids and add them to the world
+	CreateAsteroids(10);
+
+	// Set timer for demo update
+	SetTimer(100, DEMO_MODE_TIMER);
+	// Set timer for duration of game demo
+	SetTimer(10000, SHOW_GAME_OVER);
+}
+
+void Asteroids::UpdateDemoMode() {
+	if (!mSpaceship) return;
+
+	// random controller
+	int direction = rand() % 4;
+	switch (direction) {
+	case 0:
+		mSpaceship->Thrust(10);
+		break;
+	case 1:
+		mSpaceship->Rotate(90);
+		break;
+	case 2:
+		mSpaceship->Rotate(-90);
+		break;
+	case 3:
+		mSpaceship->Shoot();
+		break;
+	}
+}
+
+
+
+void Asteroids::EndDemoMode() {
+	// indicate game is not in demo mode 
+	mDemoMode = false;
+
+	// Restore the game world 
+	mGameWorld->RemoveObject(mSpaceship);
+	mGameOverLabel->SetVisible(false);
+
+	// Show the start screen messages
+	mStartScreenLabel->SetVisible(true);
+	mStartMsgLabel->SetVisible(true);
+
+}
+
 /** Stop the current game. */
 void Asteroids::Stop()
 {
@@ -83,8 +140,15 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
+	// Use the d key to start demo mode 
+	if (key == 'd') {
+		StartDemoMode();
+		return;
+	}
+
 	// Use the / key to start the game 
-	if (key == '/')
+	//modify if condition to accomodate demo mode
+	if (key == '/' && !mDemoMode)
 	{
 		// Hide the start screen messages
 		mStartScreenLabel->SetVisible(false);
@@ -178,7 +242,16 @@ void Asteroids::OnTimer(int value)
 
 	if (value == SHOW_GAME_OVER)
 	{
-		mGameOverLabel->SetVisible(true);
+		if (mDemoMode) {
+			EndDemoMode();
+		}
+		else {
+			mGameOverLabel->SetVisible(true);
+		}
+	}
+	else if (value == mDemoMode && DEMO_MODE_TIMER) {
+		UpdateDemoMode();
+		SetTimer(100, DEMO_MODE_TIMER);
 	}
 
 }

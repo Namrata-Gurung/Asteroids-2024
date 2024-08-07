@@ -76,10 +76,20 @@ private:
 	void updateHighScore();
 	void displayHighScore();
 
+	//boolean for indicating when game is in demo mode
+	bool mDemoMode;
+
+	// Methods for demo mode 
+	void StartDemoMode();
+	void EndDemoMode();
+	void UpdateDemoMode();
+
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
+	//new timer ID for demo mode
+	const static uint DEMO_MODE_TIMER = 3;
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
