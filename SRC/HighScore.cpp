@@ -17,7 +17,7 @@ HighScore::~HighScore() {
 
 
 void HighScore::AddHighScore(int score) {
-    mScores.push_back(score);
+    mScore.push_back(score);
     SortHighScores();
 }
 
@@ -25,7 +25,7 @@ void HighScore::AddHighScore(int score) {
 void HighScore::SaveHighScore() {
     ofstream file(mScoresFile);
     if (file.is_open()) {
-        for (int score : mScores) {
+        for (int score : mScore) {
             file << score << endl;
         }
         file.close();
@@ -38,7 +38,7 @@ void HighScore::LoadHighScore() {
     if (file.is_open()) {
         int score;
         while (file >> score) {
-            mScores.push_back(score);
+            mScore.push_back(score);
         }
         file.close();
         SortHighScores();
@@ -47,10 +47,10 @@ void HighScore::LoadHighScore() {
 
 //sorting the scores
 void HighScore::SortHighScores() {
-    sort(mScores.begin(), mScores.end(), greater<int>());
+    sort(mScore.begin(), mScore.end(), greater<int>());
 }
 
 // Return the scores 
 const std::vector<int>& HighScore::ListHighScores() const {
-    return mScores;
+    return mScore;
 }

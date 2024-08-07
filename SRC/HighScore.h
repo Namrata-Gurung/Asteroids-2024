@@ -31,7 +31,7 @@ private:
 	std::string mScoresFile;
 	
 	//Vector to store high scores
-	std::vector<int> mScores;
+	std::vector<int> mScore;
 	
 	//sort method declaration
 	void SortHighScores();
