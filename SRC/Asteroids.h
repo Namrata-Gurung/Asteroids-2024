@@ -9,6 +9,7 @@
 #include "ScoreKeeper.h"
 #include "Player.h"
 #include "IPlayerListener.h"
+#include "HighScore.h"
 
 class GameObject;
 class Spaceship;
@@ -55,6 +56,9 @@ private:
 	// Start Screen declarations
 	shared_ptr<GUILabel> mStartScreenLabel;
 	shared_ptr<GUILabel> mStartMsgLabel;
+	
+	// high score table declarations 
+	shared_ptr<GUILabel> mHighScoreLabel;
 
 	uint mLevel;
 	uint mAsteroidCount;
@@ -65,6 +69,14 @@ private:
 	void CreateAsteroids(const uint num_asteroids);
 	shared_ptr<GameObject> CreateExplosion();
 	
+
+	HighScore mHighScore;
+
+	// high score methods
+	void updateHighScore();
+	void displayHighScore();
+
+
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
