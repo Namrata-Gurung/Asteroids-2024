@@ -67,6 +67,9 @@ void Asteroids::Start()
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
 
+	//Start demo call when the game session starts 
+	StartDemo();
+
 	// Start the game
 	GameSession::Start();
 }
@@ -78,6 +81,19 @@ void Asteroids::Stop()
 	GameSession::Stop();
 }
 
+
+void Asteroids::StartDemo() {
+	// Create some asteroids and add them to the world - they stay for the rest for the game 
+	CreateAsteroids(10);
+}
+
+void Asteroids::EndDemo() {
+	// when key is pressed, the start message is hidden
+	mStartScreenLabel->SetVisible(false);
+	mStartMsgLabel->SetVisible(false);
+	//mGameWorld->RemoveObject(mSpaceship);
+}
+
 // PUBLIC INSTANCE METHODS IMPLEMENTING IKeyboardListener /////////////////////
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
@@ -86,14 +102,9 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 
 	if (key == '/') {
 
-		// when key is pressed, the start message is hidden
-		mStartScreenLabel->SetVisible(false);
-		mStartMsgLabel->SetVisible(false);
-
+		EndDemo();
 		// Create a spaceship and add it to the world
 		mGameWorld->AddObject(CreateSpaceship());
-		// Create some asteroids and add them to the world
-		CreateAsteroids(10);
 	}
 
 	switch (key)
