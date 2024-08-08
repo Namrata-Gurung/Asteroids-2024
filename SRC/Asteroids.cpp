@@ -68,17 +68,15 @@ void Asteroids::Start()
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr); 
 
+	StartDemoMode();
+
 	// Start the game
 	GameSession::Start();
 }
-/*
+
+
 //Initialise start method for demo
 void Asteroids::StartDemoMode() {
-	// indicate game is in demo mode 
-	mDemoMode = true;
-	
-	mStartMsgLabel->SetVisible(false);
-	mStartScreenLabel->SetVisible(false);
 
 	// Create a spaceship and add it to the world
 	mGameWorld->AddObject(CreateSpaceship());
@@ -86,49 +84,58 @@ void Asteroids::StartDemoMode() {
 	// Create some asteroids and add them to the world
 	CreateAsteroids(10);
 
-	// Set timer for demo update
-	SetTimer(100, DEMO_MODE_TIMER);
-	// Set timer for duration of game demo
-	SetTimer(10000, SHOW_GAME_OVER);
-}
-
-void Asteroids::UpdateDemoMode() {
-	if (!mSpaceship) return;
-
-	// random controller
-	int direction = rand() % 4;
-	switch (direction) {
-	case 0:
-		mSpaceship->Thrust(10);
-		break;
-	case 1:
-		mSpaceship->Rotate(90);
-		break;
-	case 2:
-		mSpaceship->Rotate(-90);
-		break;
-	case 3:
-		mSpaceship->Shoot();
-		break;
-	}
+	//call the method within start demo
+	UpdateDemoMode();
 }
 
 
 
-void Asteroids::EndDemoMode() {
-	// indicate game is not in demo mode 
-	mDemoMode = false;
-
-	// Restore the game world 
+void Asteroids::StopDemoMode() {
+	
+	// Remove all objects from the game world
 	mGameWorld->RemoveObject(mSpaceship);
+
+	// Hide game over label
 	mGameOverLabel->SetVisible(false);
 
 	// Show the start screen messages
 	mStartScreenLabel->SetVisible(true);
 	mStartMsgLabel->SetVisible(true);
-
 }
-*/
+
+void Asteroids::UpdateDemoMode() {
+	if (!mSpaceship) return;
+
+	// Randomly rotate and thrust
+	int direction = rand() % 5;
+	switch (direction) {
+	case 0:
+		mSpaceship->Thrust(10); // Thrust forward
+		break;
+	case 1:
+		mSpaceship->Rotate(90); // Rotate left
+		break;
+	case 2:
+		mSpaceship->Rotate(-90); // Rotate right
+		break;
+	case 3:
+		mSpaceship->Shoot(); // Shoot
+		break;
+	}
+}
+
+void Asteroids::ResetGame() {
+
+	// Hide the start screen messages
+	mStartScreenLabel->SetVisible(false);
+	mStartMsgLabel->SetVisible(false);
+
+	// Create a spaceship and add it to the world
+	mGameWorld->AddObject(CreateSpaceship());
+
+	// Create some asteroids and add them to the world
+	//CreateAsteroids(10);
+}
 
 /** Stop the current game. */
 void Asteroids::Stop()
@@ -142,15 +149,12 @@ void Asteroids::Stop()
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
 	// Use the d key to start demo mode 
-	
-
-	// Use the / key to start the game 
-	//modify if condition to accomodate demo mode
-	if (key == '/' && !mDemoMode)
+	/*if (key == 'd')
 	{
 		// Hide the start screen messages
 		mStartScreenLabel->SetVisible(false);
 		mStartMsgLabel->SetVisible(false);
+		mDemoModeLabel->SetVisible(false);
 
 		// Create a spaceship and add it to the world
 		mGameWorld->AddObject(CreateSpaceship());
@@ -159,7 +163,22 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 		CreateAsteroids(10);
 
 		return;
-}
+	}
+	*/
+
+	// Use the / key to start the game 
+	//modify if condition to accomodate demo mode
+	if (key == '/')
+	{
+		//call stop demo method for clear the world
+		StopDemoMode();
+
+		//create new spaceship and asteroids
+		ResetGame();
+
+		return;
+	}
+
 	switch (key)
 	{
 	case ' ':
@@ -229,31 +248,19 @@ void Asteroids::OnTimer(int value)
 	{
 		mSpaceship->Reset();
 		mGameWorld->AddObject(mSpaceship);
-	}
-
+	} 
+	
 	if (value == START_NEXT_LEVEL)
 	{
 		mLevel++;
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
-	}
 
-	if (value == SHOW_GAME_OVER)
-	{
-		/*if (mDemoMode) {
-			EndDemoMode();
-		}
-		else {
-		*/
+	}
+	if (value == SHOW_GAME_OVER) {
 
 		mGameOverLabel->SetVisible(true);
 	}
-
-	/*else if (value == mDemoMode && DEMO_MODE_TIMER) {
-		UpdateDemoMode();
-		SetTimer(100, DEMO_MODE_TIMER);
-	}
-	*/
 
 }
 
@@ -353,13 +360,13 @@ void Asteroids::CreateGUI()
 	//Add the GUILabel to the GUIContainer
 	shared_ptr<GUIComponent> start_msg_component
 		= static_pointer_cast<GUIComponent>(mStartMsgLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4f));
+	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4));
 
 	// high score label
 	// Create a new GUILabel and wrap it up in a shared_ptr
 	mHighScoreLabel = shared_ptr<GUILabel>(new GUILabel(""));
 	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-    mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
 	mHighScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
 	// Set the visibility of the label to false (hidden)
@@ -368,20 +375,6 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> high_score_component
 		= static_pointer_cast<GUIComponent>(mHighScoreLabel);
 	mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.5f));
-
-
-	// Create a new GUILabel and wrap it up in a shared_ptr
-	mDemoModeLabel = shared_ptr<GUILabel>(new GUILabel("Press 'd' to enter the Demo Mode"));
-	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-	mDemoModeLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
-	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
-	mDemoModeLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
-	// Set the visibility of the label to true (visible) so it is seen when the game starts
-	mDemoModeLabel->SetVisible(true);
-	// Add the GUILabel to the GUIContainer  
-	shared_ptr<GUIComponent> demo_mode_component
-		= static_pointer_cast<GUIComponent>(mDemoModeLabel);
-	mGameDisplay->GetContainer()->AddComponent(demo_mode_component, GLVector2f(0.5f, 0.5f));
 }
 
 void Asteroids::OnScoreChanged(int score)

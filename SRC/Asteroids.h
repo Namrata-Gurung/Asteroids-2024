@@ -77,13 +77,15 @@ private:
 	void displayHighScore();
 
 	//boolean for indicating when game is in demo mode
-	bool mDemoMode;
+	//bool mDemoMode;
 
 	//Methods for demo mode 
 	void StartDemoMode();
-	void EndDemoMode();
+	void StopDemoMode();
 	void UpdateDemoMode();
 
+	//method for game reset after demo mode
+	void ResetGame();
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
