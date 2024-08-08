@@ -244,6 +244,19 @@ void Asteroids::CreateGUI()
 		= static_pointer_cast<GUIComponent>(mGameOverLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START GAME"));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	// Set the visibility of the label to false (hidden)
+	mStartScreenLabel->SetVisible(false);
+	// Add the GUILabel to the GUIContainer  
+	shared_ptr<GUIComponent> start_game_component
+		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
+	mGameDisplay->GetContainer()->AddComponent(start_game_component, GLVector2f(0.5f, 0.5f));
+
 }
 
 void Asteroids::OnScoreChanged(int score)
