@@ -89,7 +89,6 @@ void Asteroids::StartDemoMode() {
 }
 
 
-
 void Asteroids::StopDemoMode() {
 	
 	// Remove all objects from the game world
@@ -107,7 +106,7 @@ void Asteroids::UpdateDemoMode() {
 	if (!mSpaceship) return;
 
 	// Randomly rotate and thrust
-	int direction = rand() % 5;
+	int direction = rand() % 6;
 	switch (direction) {
 	case 0:
 		mSpaceship->Thrust(10); // Thrust forward
@@ -148,24 +147,6 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-	// Use the d key to start demo mode 
-	/*if (key == 'd')
-	{
-		// Hide the start screen messages
-		mStartScreenLabel->SetVisible(false);
-		mStartMsgLabel->SetVisible(false);
-		mDemoModeLabel->SetVisible(false);
-
-		// Create a spaceship and add it to the world
-		mGameWorld->AddObject(CreateSpaceship());
-
-		// Create some asteroids and add them to the world
-		CreateAsteroids(10);
-
-		return;
-	}
-	*/
-
 	// Use the / key to start the game 
 	//modify if condition to accomodate demo mode
 	if (key == '/')
