@@ -58,11 +58,6 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
-	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
-	// Create some asteroids and add them to the world
-	CreateAsteroids(10);
-
 	//Create the GUI
 	CreateGUI();
 
@@ -87,6 +82,19 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
+	//if condition for key pressed, which starts the game
+
+	if (key == '/') {
+
+		// when key is pressed, the start message is hidden
+		mStartScreenLabel->SetVisible(false);
+
+		// Create a spaceship and add it to the world
+		mGameWorld->AddObject(CreateSpaceship());
+		// Create some asteroids and add them to the world
+		CreateAsteroids(10);
+	}
+
 	switch (key)
 	{
 	case ' ':
@@ -250,8 +258,8 @@ void Asteroids::CreateGUI()
 	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
 	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
-	// Set the visibility of the label to false (hidden)
-	mStartScreenLabel->SetVisible(false);
+	// Set the visibility of the label to true (visible)
+	mStartScreenLabel->SetVisible(true);
 	// Add the GUILabel to the GUIContainer  
 	shared_ptr<GUIComponent> start_game_component
 		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
