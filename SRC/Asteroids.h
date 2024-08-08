@@ -79,7 +79,7 @@ private:
 	//boolean for indicating when game is in demo mode
 	bool mDemoMode;
 
-	// Methods for demo mode 
+	//Methods for demo mode 
 	void StartDemoMode();
 	void EndDemoMode();
 	void UpdateDemoMode();

@@ -17,7 +17,7 @@
 
 /** Constructor. Takes arguments from command line, just in case. */
 Asteroids::Asteroids(int argc, char* argv[])
-	: GameSession(argc, argv), mHighScore("scores.txt"), mDemoMode(false)
+	: GameSession(argc, argv), mHighScore("scores.txt")
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
@@ -71,7 +71,7 @@ void Asteroids::Start()
 	// Start the game
 	GameSession::Start();
 }
-
+/*
 //Initialise start method for demo
 void Asteroids::StartDemoMode() {
 	// indicate game is in demo mode 
@@ -128,6 +128,7 @@ void Asteroids::EndDemoMode() {
 	mStartMsgLabel->SetVisible(true);
 
 }
+*/
 
 /** Stop the current game. */
 void Asteroids::Stop()
@@ -141,10 +142,7 @@ void Asteroids::Stop()
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
 	// Use the d key to start demo mode 
-	if (key == 'd') {
-		StartDemoMode();
-		return;
-	}
+	
 
 	// Use the / key to start the game 
 	//modify if condition to accomodate demo mode
@@ -242,17 +240,20 @@ void Asteroids::OnTimer(int value)
 
 	if (value == SHOW_GAME_OVER)
 	{
-		if (mDemoMode) {
+		/*if (mDemoMode) {
 			EndDemoMode();
 		}
 		else {
-			mGameOverLabel->SetVisible(true);
-		}
+		*/
+
+		mGameOverLabel->SetVisible(true);
 	}
-	else if (value == mDemoMode && DEMO_MODE_TIMER) {
+
+	/*else if (value == mDemoMode && DEMO_MODE_TIMER) {
 		UpdateDemoMode();
 		SetTimer(100, DEMO_MODE_TIMER);
 	}
+	*/
 
 }
 
@@ -367,6 +368,20 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> high_score_component
 		= static_pointer_cast<GUIComponent>(mHighScoreLabel);
 	mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.5f));
+
+
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mDemoModeLabel = shared_ptr<GUILabel>(new GUILabel("Press 'd' to enter the Demo Mode"));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+	mDemoModeLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mDemoModeLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	// Set the visibility of the label to true (visible) so it is seen when the game starts
+	mDemoModeLabel->SetVisible(true);
+	// Add the GUILabel to the GUIContainer  
+	shared_ptr<GUIComponent> demo_mode_component
+		= static_pointer_cast<GUIComponent>(mDemoModeLabel);
+	mGameDisplay->GetContainer()->AddComponent(demo_mode_component, GLVector2f(0.5f, 0.5f));
 }
 
 void Asteroids::OnScoreChanged(int score)
