@@ -88,6 +88,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 
 		// when key is pressed, the start message is hidden
 		mStartScreenLabel->SetVisible(false);
+		mStartMsgLabel->SetVisible(false);
 
 		// Create a spaceship and add it to the world
 		mGameWorld->AddObject(CreateSpaceship());
@@ -252,8 +253,9 @@ void Asteroids::CreateGUI()
 		= static_pointer_cast<GUIComponent>(mGameOverLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 
+	// --- Start Screen Labels ---
 	// Create a new GUILabel and wrap it up in a shared_ptr
-	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START GAME"));
+	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START"));
 	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
 	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
@@ -263,7 +265,20 @@ void Asteroids::CreateGUI()
 	// Add the GUILabel to the GUIContainer  
 	shared_ptr<GUIComponent> start_game_component
 		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_game_component, GLVector2f(0.5f, 0.5f));
+	mGameDisplay->GetContainer()->AddComponent(start_game_component, GLVector2f(0.5f, 0.7f));
+
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mStartMsgLabel = shared_ptr<GUILabel>(new GUILabel("Please press / to begin"));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+	mStartMsgLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mStartMsgLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	// Set the visibility of the label to true (visible)
+	mStartMsgLabel->SetVisible(true);
+	// Add the GUILabel to the GUIContainer  
+	shared_ptr<GUIComponent> start_msg_component
+		= static_pointer_cast<GUIComponent>(mStartMsgLabel);
+	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4f));
 
 }
 
