@@ -11,13 +11,12 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
-#include "HighScore.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
 /** Constructor. Takes arguments from command line, just in case. */
-Asteroids::Asteroids(int argc, char* argv[])
-	: GameSession(argc, argv), mHighScore("scores.txt")
+Asteroids::Asteroids(int argc, char *argv[])
+	: GameSession(argc, argv)
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
@@ -59,6 +58,11 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
+	// Create a spaceship and add it to the world
+	mGameWorld->AddObject(CreateSpaceship());
+	// Create some asteroids and add them to the world
+	CreateAsteroids(10);
+
 	//Create the GUI
 	CreateGUI();
 
@@ -66,74 +70,10 @@ void Asteroids::Start()
 	mGameWorld->AddListener(&mPlayer);
 
 	// Add this class as a listener of the player
-	mPlayer.AddListener(thisPtr); 
-
-	StartDemoMode();
+	mPlayer.AddListener(thisPtr);
 
 	// Start the game
 	GameSession::Start();
-}
-
-
-//Initialise start method for demo
-void Asteroids::StartDemoMode() {
-
-	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
-
-	// Create some asteroids and add them to the world
-	CreateAsteroids(10);
-
-	//call the method within start demo
-	UpdateDemoMode();
-}
-
-
-void Asteroids::StopDemoMode() {
-	
-	// Remove all objects from the game world
-	mGameWorld->RemoveObject(mSpaceship);
-
-	// Hide game over label
-	mGameOverLabel->SetVisible(false);
-
-	// Show the start screen messages
-	mStartScreenLabel->SetVisible(true);
-	mStartMsgLabel->SetVisible(true);
-}
-
-void Asteroids::UpdateDemoMode() {
-	if (!mSpaceship) return;
-
-	// Randomly rotate and thrust
-	int direction = rand() % 6;
-	switch (direction) {
-	case 0:
-		mSpaceship->Thrust(10); // Thrust forward
-		break;
-	case 1:
-		mSpaceship->Rotate(90); // Rotate left
-		break;
-	case 2:
-		mSpaceship->Rotate(-90); // Rotate right
-		break;
-	case 3:
-		mSpaceship->Shoot(); // Shoot
-		break;
-	}
-}
-
-void Asteroids::ResetGame() {
-
-	// Hide the start screen messages
-	mStartScreenLabel->SetVisible(false);
-	mStartMsgLabel->SetVisible(false);
-
-	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
-
-	// Create some asteroids and add them to the world
-	//CreateAsteroids(10);
 }
 
 /** Stop the current game. */
@@ -147,19 +87,6 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-	// Use the / key to start the game 
-	//modify if condition to accomodate demo mode
-	if (key == '/')
-	{
-		//call stop demo method for clear the world
-		StopDemoMode();
-
-		//create new spaceship and asteroids
-		ResetGame();
-
-		return;
-	}
-
 	switch (key)
 	{
 	case ' ':
@@ -229,17 +156,17 @@ void Asteroids::OnTimer(int value)
 	{
 		mSpaceship->Reset();
 		mGameWorld->AddObject(mSpaceship);
-	} 
-	
+	}
+
 	if (value == START_NEXT_LEVEL)
 	{
 		mLevel++;
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
-
 	}
-	if (value == SHOW_GAME_OVER) {
 
+	if (value == SHOW_GAME_OVER)
+	{
 		mGameOverLabel->SetVisible(true);
 	}
 
@@ -317,45 +244,6 @@ void Asteroids::CreateGUI()
 		= static_pointer_cast<GUIComponent>(mGameOverLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 
-	// Create a new GUILabel and wrap it up in a shared_ptr
-	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("START GAME"));
-	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
-	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
-	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
-	//Set the visibility of the label to true so that when the game session begins, the START message is visible
-	mStartScreenLabel->SetVisible(true);
-	//Add the GUILabel to the GUIContainer
-	shared_ptr<GUIComponent> start_screen_component
-		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.7f));
-
-	// Create a new GUILabel and wrap it up in a shared_ptr
-	mStartMsgLabel = shared_ptr<GUILabel>(new GUILabel("Please press '/' to begin"));
-	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-	mStartMsgLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
-	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
-	mStartMsgLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
-	//Set the visibility of the label to true so that when the game session begins, the START message is visible
-	mStartMsgLabel->SetVisible(true);
-	//Add the GUILabel to the GUIContainer
-	shared_ptr<GUIComponent> start_msg_component
-		= static_pointer_cast<GUIComponent>(mStartMsgLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4));
-
-	// high score label
-	// Create a new GUILabel and wrap it up in a shared_ptr
-	mHighScoreLabel = shared_ptr<GUILabel>(new GUILabel(""));
-	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-	mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
-	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
-	mHighScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
-	// Set the visibility of the label to false (hidden)
-	mHighScoreLabel->SetVisible(false);
-	// Add the GUILabel to the GUIContainer  
-	shared_ptr<GUIComponent> high_score_component
-		= static_pointer_cast<GUIComponent>(mHighScoreLabel);
-	mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.5f));
 }
 
 void Asteroids::OnScoreChanged(int score)
@@ -366,9 +254,6 @@ void Asteroids::OnScoreChanged(int score)
 	// Get the score message as a string
 	std::string score_msg = msg_stream.str();
 	mScoreLabel->SetText(score_msg);
-
-	//update the scores text file
-	mHighScore.AddHighScore(score);
 }
 
 void Asteroids::OnPlayerKilled(int lives_left)
@@ -392,9 +277,6 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	else
 	{
 		SetTimer(500, SHOW_GAME_OVER);
-		//the high score methods 
-		updateHighScore();
-		displayHighScore();
 	}
 }
 
@@ -410,21 +292,6 @@ shared_ptr<GameObject> Asteroids::CreateExplosion()
 	return explosion;
 }
 
-// score table methods 
 
-void Asteroids::updateHighScore() {
-	int currentScore = mScoreKeeper.GetScore();
-	mHighScore.AddHighScore(currentScore);
-	mHighScore.SaveHighScore();
-}
 
-void Asteroids::displayHighScore() {
-	const auto& scores = mHighScore.ListHighScores();
-	std::ostringstream hs_stream;
-	hs_stream << "High Scores: \n";
-	for (auto score : scores) {
-		hs_stream << score << "\n";
-	}
-	mHighScoreLabel->SetText(hs_stream.str());
-	mHighScoreLabel->SetVisible(true);
-}
+

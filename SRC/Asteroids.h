@@ -9,7 +9,6 @@
 #include "ScoreKeeper.h"
 #include "Player.h"
 #include "IPlayerListener.h"
-#include "HighScore.h"
 
 class GameObject;
 class Spaceship;
@@ -53,12 +52,6 @@ private:
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
-	// Start Screen declarations
-	shared_ptr<GUILabel> mStartScreenLabel;
-	shared_ptr<GUILabel> mStartMsgLabel;
-	
-	// high score table declarations 
-	shared_ptr<GUILabel> mHighScoreLabel;
 
 	uint mLevel;
 	uint mAsteroidCount;
@@ -69,29 +62,9 @@ private:
 	void CreateAsteroids(const uint num_asteroids);
 	shared_ptr<GameObject> CreateExplosion();
 	
-
-	HighScore mHighScore;
-
-	// high score methods
-	void updateHighScore();
-	void displayHighScore();
-
-	//boolean for indicating when game is in demo mode
-	//bool mDemoMode;
-
-	//Methods for demo mode 
-	void StartDemoMode();
-	void StopDemoMode();
-	void UpdateDemoMode();
-
-	//method for game reset after demo mode
-	void ResetGame();
-
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
-	//new timer ID for demo mode
-	const static uint DEMO_MODE_TIMER = 3;
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
