@@ -11,6 +11,8 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+//Demo spaceship class
+#include "DemoSpaceship.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -85,6 +87,8 @@ void Asteroids::Stop()
 void Asteroids::StartDemo() {
 	// Create some asteroids and add them to the world - they stay for the rest for the game 
 	CreateAsteroids(10);
+
+	mGameWorld->AddObject(CreateDemoSpaceship());
 }
 
 void Asteroids::EndDemo() {
@@ -212,6 +216,28 @@ shared_ptr<GameObject> Asteroids::CreateSpaceship()
 	return mSpaceship;
 
 }
+
+//create demo spaceship
+shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
+{
+	// Create a raw pointer to a spaceship that can be converted to
+	// shared_ptrs of different types because GameWorld implements IRefCount
+	mDemoSpaceship = make_shared<DemoSpaceship>();
+	mDemoSpaceship->SetBoundingShape(make_shared<BoundingSphere>(mDemoSpaceship->GetThisPtr(), 4.0f));
+	shared_ptr<Shape> bullet_shape = make_shared<Shape>("bullet.shape");
+	mDemoSpaceship->SetBulletShape(bullet_shape);
+	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("Demo spaceship");
+	shared_ptr<Sprite> spaceship_sprite =
+		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	mDemoSpaceship->SetSprite(spaceship_sprite);
+	mDemoSpaceship->SetScale(0.1f);
+	// Reset spaceship back to centre of the world
+	mDemoSpaceship->Reset();
+	// Return the spaceship so it can be added to the world
+	return mDemoSpaceship;
+
+}
+
 
 void Asteroids::CreateAsteroids(const uint num_asteroids)
 {
