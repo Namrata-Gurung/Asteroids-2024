@@ -1,9 +1,10 @@
-/*#ifndef __DEMO_SPACESHIP_H__
+#ifndef __DEMO_SPACESHIP_H__
 #define __DEMO_SPACESHIP_H__
 
 #include "GameUtil.h"
 #include "GameObject.h"
 #include "Shape.h"
+#include "Bullet.h"
 
 class DemoSpaceship : public GameObject
 {
@@ -30,10 +31,9 @@ public:
 private:
 	float mThrust;
 
-	shared_ptr<Shape> mSpaceshipShape;
+	shared_ptr<Shape> mDemoSpaceshipShape;
 	shared_ptr<Shape> mThrusterShape;
 	shared_ptr<Shape> mBulletShape;
 };
 
 #endif
-*/
