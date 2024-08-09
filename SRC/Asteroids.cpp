@@ -85,17 +85,46 @@ void Asteroids::Stop()
 
 
 void Asteroids::StartDemo() {
+	mDemo = true; // indicates that the game session is in demo mode
 	// Create some asteroids and add them to the world - they stay for the rest for the game 
 	CreateAsteroids(10);
-
-	mGameWorld->AddObject(CreateDemoSpaceship());
+//GameWorld->AddObject(CreateSpaceship());
+	//dateDemo(); 
 }
 
+/*
+void Asteroids::UpdateDemo() {
+
+	// Randomly thrust, shoot and rotate the spaceship
+	if (!mSpaceship) return;
+
+	// Create asteroids and spaceship so that if they are destoyed they are recreated
+	mGameWorld->AddObject(mSpaceship);
+
+	int direction = rand() % 5;
+	switch (direction) {
+	case 0:
+		mSpaceship->Thrust(10); break;
+	case 1:
+		mSpaceship->Rotate(90); break;
+	case 2:
+		mSpaceship->Rotate(-90); break;
+	case 3:
+		mSpaceship->Shoot(); break;
+	case 4:
+		break;
+	}
+
+}
+*/
 void Asteroids::EndDemo() {
+
+	mDemo = false; // indicates the demo mode is over 
+
 	// when key is pressed, the start message is hidden
 	mStartScreenLabel->SetVisible(false);
 	mStartMsgLabel->SetVisible(false);
-	//mGameWorld->RemoveObject(mSpaceship);
+	mGameWorld->RemoveObject(mSpaceship);
 }
 
 // PUBLIC INSTANCE METHODS IMPLEMENTING IKeyboardListener /////////////////////
@@ -104,11 +133,12 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
 	//if condition for key pressed, which starts the game
 
-	if (key == '/') {
+	if (key == '/'){
 
 		EndDemo();
 		// Create a spaceship and add it to the world
 		mGameWorld->AddObject(CreateSpaceship());
+		return;
 	}
 
 	switch (key)
@@ -193,7 +223,6 @@ void Asteroids::OnTimer(int value)
 	{
 		mGameOverLabel->SetVisible(true);
 	}
-
 }
 
 // PROTECTED INSTANCE METHODS /////////////////////////////////////////////////
@@ -217,7 +246,7 @@ shared_ptr<GameObject> Asteroids::CreateSpaceship()
 
 }
 
-//create demo spaceship
+/*create demo spaceship
 shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
 {
 	// Create a raw pointer to a spaceship that can be converted to
@@ -237,7 +266,7 @@ shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
 	return mDemoSpaceship;
 
 }
-
+*/
 
 void Asteroids::CreateAsteroids(const uint num_asteroids)
 {
@@ -270,7 +299,7 @@ void Asteroids::CreateGUI()
 	mGameDisplay->GetContainer()->AddComponent(score_component, GLVector2f(0.0f, 1.0f));
 
 	// Create a new GUILabel and wrap it up in a shared_ptr
-	mLivesLabel = make_shared<GUILabel>("Lives: 3");
+	mLivesLabel = make_shared<GUILabel>("Lives: 5");  
 	// Set the vertical alignment of the label to GUI_VALIGN_BOTTOM
 	mLivesLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
 	// Add the GUILabel to the GUIComponent  

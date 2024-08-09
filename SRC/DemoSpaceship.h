@@ -1,4 +1,4 @@
-#ifndef __DEMO_SPACESHIP_H__
+/*#ifndef __DEMO_SPACESHIP_H__
 #define __DEMO_SPACESHIP_H__
 
 #include "GameUtil.h"
@@ -37,3 +37,4 @@ private:
 };
 
 #endif
+*/

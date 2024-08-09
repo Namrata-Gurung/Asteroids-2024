@@ -1,3 +1,4 @@
+/*
 #include "GameUtil.h"
 #include "GameWorld.h"
 #include "Bullet.h"
@@ -9,39 +10,39 @@ using namespace std;
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
 
-/**  Default constructor.*/
+/**  Default constructor.
 DemoSpaceship::DemoSpaceship()
 	: GameObject("Demo Spaceship"), mThrust(0)
 {
 }
 
-/** Construct a spaceship with given position, velocity, acceleration, angle, and rotation.*/
+/** Construct a spaceship with given position, velocity, acceleration, angle, and rotation.
 DemoSpaceship::DemoSpaceship(GLVector3f p, GLVector3f v, GLVector3f a, GLfloat h, GLfloat r)
 	: GameObject("Demo Spaceship", p, v, a, h, r), mThrust(0)
 {
 }
 
-/** Copy constructor.*/
+/** Copy constructor.
 DemoSpaceship::DemoSpaceship(const DemoSpaceship& ds)
 	: GameObject(ds), mThrust(0)
 {
 }
 
-/** Destructor.*/
+/** Destructor.
 DemoSpaceship::~DemoSpaceship(void)
 {
 }
 
 // PUBLIC INSTANCE METHODS ////////////////////////////////////////////////////
 
-/** Update this spaceship.*/
+/** Update this spaceship.
 void DemoSpaceship::Update(int t)
 {
 	// Call parent update function
 	GameObject::Update(t);
 }
 
-/** Render this spaceship.*/
+/** Render this spaceship.
 void DemoSpaceship::Render(void)
 {
 	if (mDemoSpaceshipShape.get() != NULL) mDemoSpaceshipShape->Render();
@@ -54,7 +55,7 @@ void DemoSpaceship::Render(void)
 	GameObject::Render();
 }
 
-/** Fire the rockets.*/
+/** Fire the rockets.
 void DemoSpaceship::Thrust(float t)
 {
 	mThrust = t;
@@ -63,13 +64,13 @@ void DemoSpaceship::Thrust(float t)
 	mAcceleration.y = mThrust * sin(DEG2RAD * mAngle);
 }
 
-/** Set the rotation.*/
+/** Set the rotation.
 void DemoSpaceship::Rotate(float r)
 {
 	mRotation = r;
 }
 
-/** Shoot a bullet.*/
+/** Shoot a bullet.
 void DemoSpaceship::Shoot(void)
 {
 	// Check the world exists
@@ -105,3 +106,4 @@ void DemoSpaceship::OnCollision(const GameObjectList& objects)
 {
 	mWorld->FlagForRemoval(GetThisPtr());
 }
+*/
