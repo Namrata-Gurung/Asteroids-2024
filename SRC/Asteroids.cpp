@@ -13,6 +13,8 @@
 #include "Explosion.h"
 //Demo spaceship class
 #include "DemoSpaceship.h"
+//highscore table
+#include "HighScore.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -349,6 +351,20 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> start_msg_component
 		= static_pointer_cast<GUIComponent>(mStartMsgLabel);
 	mGameDisplay->GetContainer()->AddComponent(start_msg_component, GLVector2f(0.5f, 0.4f));
+
+	// high score label
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mHighScoreLabel = shared_ptr<GUILabel>(new GUILabel(""));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+	mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mHighScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	// Set the visibility of the label to false (hidden)
+	mHighScoreLabel->SetVisible(false);
+	// Add the GUILabel to the GUIContainer  
+	shared_ptr<GUIComponent> high_score_component
+		= static_pointer_cast<GUIComponent>(mHighScoreLabel);
+	mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.5f));
 
 }
 
