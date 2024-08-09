@@ -59,6 +59,9 @@ private:
 	//Start Screen label declarations
 	shared_ptr<GUILabel> mStartScreenLabel;
 	shared_ptr<GUILabel> mStartMsgLabel;
+	//High score 
+	shared_ptr<GUILabel> mHighScoreLabel;
+	shared_ptr<GUILabel> mNameLabel;
 
 	uint mLevel;
 	uint mAsteroidCount;
@@ -74,10 +77,18 @@ private:
 	void CreateAsteroids(const uint num_asteroids);
 	shared_ptr<GameObject> CreateExplosion();
 
+	void GetScore();
+
 	// Demo mode method declarations 
 	void StartDemo();
 	void UpdateDemo();
 	void EndDemo();
+
+
+	// high score methods
+	void UpdateHighScore();
+	void DisplayHighScore();
+	void InputPlayerName();
 	
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
@@ -88,6 +99,7 @@ private:
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
+	//HighScore mHighScore;
 
 	bool mDemo;
 };
