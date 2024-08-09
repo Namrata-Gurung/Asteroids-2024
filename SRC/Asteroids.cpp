@@ -85,11 +85,14 @@ void Asteroids::Stop()
 
 
 void Asteroids::StartDemo() {
+
 	mDemo = true; // indicates that the game session is in demo mode
 	// Create some asteroids and add them to the world - they stay for the rest for the game 
 	CreateAsteroids(10);
 //GameWorld->AddObject(CreateSpaceship());
 	//dateDemo(); 
+
+
 }
 
 /*
@@ -117,6 +120,7 @@ void Asteroids::UpdateDemo() {
 
 }
 */
+
 void Asteroids::EndDemo() {
 
 	mDemo = false; // indicates the demo mode is over 
