@@ -356,7 +356,7 @@ void Asteroids::CreateGUI()
 	// Create a new GUILabel and wrap it up in a shared_ptr
 	mHighScoreLabel = shared_ptr<GUILabel>(new GUILabel(""));
 	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
-	mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mHighScoreLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
 	mHighScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
 	// Set the visibility of the label to false (hidden)
@@ -365,6 +365,19 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> high_score_component
 		= static_pointer_cast<GUIComponent>(mHighScoreLabel);
 	mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.5f));
+
+	// Create a new GUILabel and wrap it up in a shared_ptr
+	mNameLabel = shared_ptr<GUILabel>(new GUILabel(""));
+	// Set the horizontal alignment of the label to GUI_HALIGN_CENTER
+    mNameLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	// Set the vertical alignment of the label to GUI_VALIGN_MIDDLE
+	mNameLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	// Set the visibility of the label to false (hidden)
+	mNameLabel->SetVisible(false);
+	// Add the GUILabel to the GUIContainer  
+	shared_ptr<GUIComponent> name_component
+		= static_pointer_cast<GUIComponent>(mNameLabel);
+	mGameDisplay->GetContainer()->AddComponent(name_component, GLVector2f(0.5f, 0.5f));
 
 }
 
@@ -376,6 +389,9 @@ void Asteroids::OnScoreChanged(int score)
 	// Get the score message as a string
 	std::string score_msg = msg_stream.str();
 	mScoreLabel->SetText(score_msg);
+
+	//update the scores text file
+	//	mHighScore.AddHighScore(score);
 }
 
 void Asteroids::OnPlayerKilled(int lives_left)
@@ -399,6 +415,10 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	else
 	{
 		SetTimer(500, SHOW_GAME_OVER);
+		//UpdateHighScore();
+	
+		// input player name function
+		//InputPlayerName();
 	}
 }
 
@@ -414,6 +434,27 @@ shared_ptr<GameObject> Asteroids::CreateExplosion()
 	return explosion;
 }
 
+/* HIGH SCORE TABlE
+void Asteroids::UpdateHighScore(){
+		int currentScore = mScoreKeeper.GetScore();
+		mHighScore.AddHighScore(currentScore);
+		mHighScore.SaveHighScore();
+		
+		//	DisplayHighScore();
+}
 
+void Asteroids::DisplayHighScore() {
+	const auto& scores = mHighScore.ListHighScores();
+	std::ostringstream hs_stream;
+	hs_stream << "High Scores: \n";
+	for (auto score : scores) {
+		hs_stream << score << "\n";
+	}
+	mHighScoreLabel->SetText(hs_stream.str());
+	mHighScoreLabel->SetVisible(true);
+}
 
+void Asteroids::InputPlayerName() {
 
+}
+*/
